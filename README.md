@@ -1,81 +1,92 @@
-🚀 Secure WooCommerce-Telegram File Delivery System
-A professional, enterprise-grade PHP solution designed to automate the secure delivery of WooCommerce digital products via Telegram bots. This system bypasses server bandwidth limits by using Telegram's native infrastructure while ensuring high-level content protection.
+<div align="center">
+  <img src="https://img.icons8.com/color/96/000000/telegram-app.png" width="80" alt="Telegram Logo" />
+  <img src="https://img.icons8.com/color/96/000000/wordpress.png" width="80" alt="WordPress Logo" />
+  
+  <h1>🚀 Secure WooCommerce-Telegram Delivery System</h1>
+  
+  <p><b>An enterprise-grade PHP automation for protected digital product distribution via Telegram bots.</b></p>
 
-🌟 Key Features
-Automated Order Verification: Real-time validation of WooCommerce purchase tokens (Order IDs).
+  <p>
+    <img src="https://img.shields.io/badge/PHP-7.4+-777bb4.svg?style=flat-square&logo=php" alt="PHP Version" />
+    <img src="https://img.shields.io/badge/WordPress-Core-21759b.svg?style=flat-square&logo=wordpress" alt="WordPress Core" />
+    <img src="https://img.shields.io/badge/Telegram-Bot_API-26A5E4.svg?style=flat-square&logo=telegram" alt="Telegram API" />
+    <img src="https://img.shields.io/badge/Security-Protected-green.svg?style=flat-square" alt="Security" />
+  </p>
+</div>
 
-Anti-Piracy Protection: Leverages Telegram's protect_content feature to prevent forwarding, saving, or capturing of digital assets.
+---
 
-Resource Efficiency: Files are copied directly from a private source channel to the user, saving your server's bandwidth.
+## 📖 Introduction
+This project provides a robust and secure solution for automating the delivery of WooCommerce digital products. By bridging the **WooCommerce Database** and **Telegram Bot API**, it allows customers to receive their purchased files securely within Telegram.
 
-Anti-Timeout Logic: Implements set_time_limit(0) to handle massive file batches without server crashes.
+### 🔄 How It Works
+1. **Purchase**: The customer buys a digital product on your WooCommerce site and receives an Order ID (Security Token).
+2. **Verification**: The customer sends the Order ID to your Telegram bot.
+3. **Validation**: The bot connects to WordPress, verifies the order status, and identifies the linked products.
+4. **Protected Delivery**: The bot copies the file from your **Private Source Channel** to the user.
+5. **Security Policy**: The `protect_content` feature is enabled, **preventing users from forwarding, saving, or capturing screenshots** of your premium content.
 
-Security First: Uses a secret webhook token to verify that requests only come from official Telegram servers.
+---
 
+## ✨ Core Features
+* **🛡️ Content Protection**: Prevents unauthorized distribution by disabling forwarding and saving features in Telegram.
+* **🔑 Smart Token System**: Validates WooCommerce Order IDs and implements a "One-Time Use" policy to prevent abuse.
+* **⚡ High Performance**: Uses `set_time_limit(0)` and native Telegram file copying to handle large files and prevent server timeouts.
+* **☁️ Zero Bandwidth Cost**: Files are transferred directly between Telegram servers; your web host bandwidth is not consumed for file delivery.
+* **📝 Comprehensive Logging**: Every transaction, API call, and error is recorded in a secure log file for easy debugging.
 
-📂 Project Architecture (OOP)
+---
 
-The project is built with a modular, Object-Oriented approach for maximum maintainability:
+## 📂 Project Structure (OOP)
+The project follows a modular Object-Oriented design for high maintainability:
 
-src/Core/Config.php: Manages environment variables and .env loading.
+```text
+├── src/
+│   ├── Core/
+│   │   ├── Config.php       # Environment Variable & .env Management
+│   │   ├── Logger.php       # Event Tracking and Error Logging
+│   │   └── Handler.php      # Main Logic Engine
+│   ├── Telegram/
+│   │   └── Bot.php          # Telegram API Interaction Layer
+│   └── WordPress/
+│       └── OrderManager.php # WooCommerce Database Bridge
+├── webhook.php              # Secure Webhook Entry Point
+├── .env.example             # Template for Environment Configuration
+├── .gitignore               # Prevents sensitive files from being public
+└── logs/                    # Directory for log files (Writable)
+🛠️ Step-by-Step Installation
+1. Server Setup
+Upload the project files to your server.
 
-src/Core/Logger.php: Comprehensive logging system for events and errors.
+Ensure the logs/ directory has write permissions: chmod -R 775 logs.
 
-src/Telegram/Bot.php: Core class for Telegram API interactions (sending messages, copying files).
+2. Environment Configuration
+Rename .env.example to .env and fill in your private credentials:
 
-src/WordPress/OrderManager.php: Bridge to WooCommerce for verifying order status and purchase history.
-
-src/Core/Handler.php: The "brain" of the application that processes incoming webhook requests.
-
-webhook.php: The secure entry point for the Telegram Webhook.
-
-🛠 Setup & Installation
-
-1. Prerequisites
-
-PHP 7.4+ and WordPress/WooCommerce installation.
-
-A Private Telegram Channel containing your digital products.
-
-A Telegram Bot token (from @BotFather).
-
-2. Configuration (.env)
-
-Rename .env.example to .env and configure your credentials:
-
-TELEGRAM_BOT_TOKEN=YOUR_BOT_TOKEN
-SOURCE_CHANNEL_ID=-100XXXXXXXXXX
-WEBHOOK_SECRET_TOKEN=YOUR_SECRET_UUID
+Code snippet
+TELEGRAM_BOT_TOKEN=your_bot_token_here
+SOURCE_CHANNEL_ID=-100xxxxxxxxxx
+WEBHOOK_SECRET_TOKEN=your_secret_uuid
 WP_LOAD_PATH=../wp-load.php
-LOG_FILE=logs/telegram.log
-
-
 3. Product Mapping
-Open webhook.php and configure the $productMap array. This links your WooCommerce Product IDs to Telegram Message IDs:
+In webhook.php, link your WooCommerce Product IDs to your Telegram Source Message IDs:
 
+PHP
 $productMap = [
-    123 => ['1001', '1002'], // Product ID => [Message ID 1, Message ID 2]
-    456 => ['2001']         // Product ID => [Single File]
+    123 => ['1001', '1002'], // WooCommerce Product ID => [Telegram Message IDs]
 ];
-
 4. Setting the Webhook
+Execute this command in your terminal to activate the bot:
 
-Run the following cURL command to link Telegram to your script:
-
-
-curl -F "url=https://yourdomain.com/path/to/webhook.php" \
+Bash
+curl -F "url=[https://yourdomain.com/path/to/webhook.php](https://yourdomain.com/path/to/webhook.php)" \
      -F "secret_token=YOUR_SECRET_TOKEN" \
-     https://api.telegram.org/bot<YOUR_BOT_TOKEN>/setWebhook
+     [https://api.telegram.org/bot](https://api.telegram.org/bot)<YOUR_BOT_TOKEN>/setWebhook
+🛡️ Security & Debugging
+Webhook Security: Every incoming request is verified via the X-Telegram-Bot-Api-Secret-Token header.
 
+Error Monitoring: Check logs/telegram.log for a detailed history of API interactions and server-side errors.
 
-🛡 Security & Debugging
+Database Integrity: All interactions with the WooCommerce database follow WordPress's security best practices.
 
-Logging: Check logs/telegram.log for a detailed history of API responses and errors.
-
-Permissions: Ensure the logs/ directory is writable (chmod -R 775).
-
-Database: All queries use WordPress native database security standards.
-
-🤝 Contributing
-
-Contributions are welcome! feel free to submit a Pull Request.
+<div align="center"> <p>Built for the <b>Meroviee</b> Ecosystem</p> <p><i>Empowering Digital Creators with Secure Automation.</i></p> </div>

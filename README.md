@@ -95,5 +95,3 @@ curl -F "url=[https://yourdomain.com/path/to/webhook.php](https://yourdomain.com
 🐞 Error Monitoring: Check logs/telegram.log for a detailed, real-time history of API interactions, purchase validations, and server-side errors.
 
 🗄️ Database Integrity: All interactions with the WooCommerce database are performed using WordPress's native security best practices to prevent SQL injection and unauthorized access.
-
-<div align="center"> <p>Built for the <b>Meroviee</b> Ecosystem</p> <p><i>Empowering Digital Creators with Secure Automation.</i></p> </div>

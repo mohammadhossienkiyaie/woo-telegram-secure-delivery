@@ -29,34 +29,34 @@ class Handler {
         } elseif (is_numeric($text)) {
             $this->handleToken($chat_id, $text);
         } else {
-            $this->bot->sendMessage($chat_id, "لطفاً فقط توکن خود را برای دریافت فایل‌ها ارسال کنید.");
+            $this->bot->sendMessage($chat_id, "Please just send your token to receive the files.");
         }
     }
 
     private function handleStart($chat_id) {
-        $this->bot->sendMessage($chat_id, "سلام 👋\nبه ربات دانلود مرووی خوش اومدی\nبا وارد کردن توکن خرید، فایل‌های دانلود رو دریافت کنید.\n\n(عدد توکن را به صورت انگلیسی بفرستید)");
+        $this->bot->sendMessage($chat_id, "Hello 👋\nWelcome to the Merovi Download Robot\nReceive the download files by entering the purchase token.\n\n(Send the token number in English)");
     }
 
     private function handleToken($chat_id, $token) {
         $status = $this->orderManager->getTokenStatus($token);
 
         if ($status === 'error') {
-            $this->bot->sendMessage($chat_id, "❌ خطای سیستم: اتصال به سایت برقرار نشد.");
+            $this->bot->sendMessage($chat_id, "❌ System error: Connection to the site could not be established.");
             return;
         }
 
         if ($status !== 'valid') {
-            $msg = ($status === 'used') ? "توکن $token قبلاً استفاده شده است." : "توکن $token نامعتبر است.";
+            $msg = ($status === 'used') ? "The token $token has already been used." : "The token $token is invalid.";
             $this->bot->sendMessage($chat_id, $msg);
             return;
         }
 
         if (!$this->orderManager->lockToken($token)) {
-            $this->bot->sendMessage($chat_id, "خطا در پردازش توکن. لطفاً مجدد تلاش کنید.");
+            $this->bot->sendMessage($chat_id, "Error processing token. Please try again.");
             return;
         }
 
-        $this->bot->sendMessage($chat_id, "توکن تایید شد ✅\nدر حال ارسال فایل‌ها...");
+        $this->bot->sendMessage($chat_id, "Token verified ✅\nSending files...");
         $this->processDelivery($chat_id, $token);
     }
 
@@ -79,9 +79,9 @@ class Handler {
 
         if ($filesSent > 0) {
             $this->orderManager->markAsUsed($token);
-            $this->bot->sendMessage($chat_id, "✅ فایل‌ها با موفقیت ارسال شدند.");
+            $this->bot->sendMessage($chat_id, "✅ Files sent successfully.");
         } else {
-            $this->bot->sendMessage($chat_id, "⚠️ خطایی در ارسال فایل‌ها رخ داد.");
+            $this->bot->sendMessage($chat_id, "⚠️ An error occurred while sending files.");
         }
     }
 }

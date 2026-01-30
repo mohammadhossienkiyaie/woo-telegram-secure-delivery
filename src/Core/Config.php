@@ -7,8 +7,8 @@ class Config {
     private $settings = [];
 
     private function __construct() {
-        // در یک پروژه واقعی از PHP DotEnv استفاده می‌شود.
-        // برای سادگی و عدم نیاز به کامپوزر در اینجا، مقادیر را از فایل .env دستی می‌خوانیم یا از متغیرهای محیطی استفاده می‌کنیم.
+    // In a real application php dotEnv is used.
+    // for simplicity and no need for composer here , we read the values from the .env file manully or use environment variables.
         $this->loadFromEnv();
     }
 

@@ -54,39 +54,46 @@ The project follows a modular Object-Oriented design for high maintainability:
 ├── .env.example             # Template for Environment Configuration
 ├── .gitignore               # Prevents sensitive files from being public
 └── logs/                    # Directory for log files (Writable)
-🛠️ Step-by-Step Installation
-1. Server Setup
-Upload the project files to your server.
+```
 
-Ensure the logs/ directory has write permissions: chmod -R 775 logs.
+## 🛠️ Step-by-Step Installation
 
-2. Environment Configuration
-Rename .env.example to .env and fill in your private credentials:
+### 1️⃣ Server Setup
+* **Upload Files**: Transfer all project files to a secure directory on your web server.
+* **Permissions**: Ensure the `logs/` directory is writable by the web server. Execute the following command in your terminal:
+  ```bash
+  chmod -R 775 logs
+2️⃣ Environment Configuration
+Create a .env file in the root directory (you can rename .env.example) and fill in your private credentials:
 
-Code snippet
+
 TELEGRAM_BOT_TOKEN=your_bot_token_here
 SOURCE_CHANNEL_ID=-100xxxxxxxxxx
 WEBHOOK_SECRET_TOKEN=your_secret_uuid
 WP_LOAD_PATH=../wp-load.php
-3. Product Mapping
-In webhook.php, link your WooCommerce Product IDs to your Telegram Source Message IDs:
+LOG_FILE=logs/telegram.log
 
-PHP
+3️⃣ Product Mapping
+Open webhook.php and configure the $productMap array. This links your WooCommerce Product IDs to the specific Telegram Message IDs from your source channel:
+
+
 $productMap = [
-    123 => ['1001', '1002'], // WooCommerce Product ID => [Telegram Message IDs]
+    123 => ['1001', '1002'], // WooCommerce Product ID => [Telegram Msg IDs]
+    456 => ['2005']          // Another Product
 ];
-4. Setting the Webhook
-Execute this command in your terminal to activate the bot:
+4️⃣ Setting the Webhook
+Tell Telegram where to send your bot's updates by executing this cURL command (Replace <YOUR_BOT_TOKEN> and the URL with your actual data):
 
-Bash
+
 curl -F "url=[https://yourdomain.com/path/to/webhook.php](https://yourdomain.com/path/to/webhook.php)" \
      -F "secret_token=YOUR_SECRET_TOKEN" \
      [https://api.telegram.org/bot](https://api.telegram.org/bot)<YOUR_BOT_TOKEN>/setWebhook
+     
 🛡️ Security & Debugging
-Webhook Security: Every incoming request is verified via the X-Telegram-Bot-Api-Secret-Token header.
+🔒 Webhook Security: The system automatically verifies the X-Telegram-Bot-Api-Secret-Token header for every incoming request to ensure it originates from Telegram.
 
-Error Monitoring: Check logs/telegram.log for a detailed history of API interactions and server-side errors.
+🐞 Error Monitoring: Check logs/telegram.log for a detailed, real-time history of API interactions, purchase validations, and server-side errors.
 
-Database Integrity: All interactions with the WooCommerce database follow WordPress's security best practices.
+🗄️ Database Integrity: All interactions with the WooCommerce database are performed using WordPress's native security best practices to prevent SQL injection and unauthorized access.
 
 <div align="center"> <p>Built for the <b>Meroviee</b> Ecosystem</p> <p><i>Empowering Digital Creators with Secure Automation.</i></p> </div>
